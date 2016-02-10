@@ -127,10 +127,17 @@ void MainWindow::set_Image()
     int fin_x =origen_x+imageWindow.width;
     int fin_y =origen_y+imageWindow.height;
 
-
+if(showColorImage){
     Mat cuadroImagen=colorImage.colRange(imageWindow.x,imageWindow.x+imageWindow.width).rowRange(imageWindow.y,imageWindow.y+imageWindow.height);
 
     cuadroImagen.copyTo(destColorImage.colRange(origen_x,fin_x).rowRange(origen_y,fin_y));
+}
+else{
+    Mat cuadroImagen=grayImage.colRange(imageWindow.x,imageWindow.x+imageWindow.width).rowRange(imageWindow.y,imageWindow.y+imageWindow.height);
+
+        cuadroImagen.copyTo(destGrayImage.colRange(origen_x,fin_x).rowRange(origen_y,fin_y));
+}
+   // cuadroImagen.copyTo(destGrayImage.colRange(origen_x,fin_x).rowRange(origen_y,fin_y));
 
 
  }
@@ -143,12 +150,15 @@ void MainWindow::set_Image()
 void MainWindow::save_Image()
 {
  savebool=true;
+bool test=capture;
+capture=false;
  ui->textEdit->setText("Save Image");
 
  QString filename=QFileDialog::getSaveFileName(0,"Save file",QDir::currentPath(),
 "JPG files (*.jpg);;BMP files (*.bmp);;PNG files (*.png);;All files (*.*)",
      new QString("Text files (*.txt)"));
 
+ if(!filename.isEmpty()){
  if(showColorImage){
     cvtColor(colorImage, colorImage, CV_BGR2RGB); //
     imwrite(filename.toStdString(), colorImage);
@@ -156,7 +166,8 @@ void MainWindow::save_Image()
  else{
     imwrite(filename.toStdString(), grayImage);
  }
-//capture=false;
+}
+capture=test;
 
 }
 
@@ -181,7 +192,7 @@ QString File=fileNames.front();
 fileNames.pop_front();
 colorImage=imread(File.toStdString());
 
-//cv::resize(colorImage,colorImage, Size(320,240));
+cv::resize(colorImage,colorImage, Size(320,240),0,0,INTER_LINEAR);
 
 cvtColor(colorImage, grayImage, CV_BGR2GRAY);
 cvtColor(colorImage,colorImage, CV_BGR2RGB);
@@ -196,10 +207,6 @@ void MainWindow::resize_Image()
 {
  resizebool=true;
  ui->textEdit->setText("Resize Image");
-
-
-
-
 }
 
 
