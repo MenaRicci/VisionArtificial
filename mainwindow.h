@@ -37,10 +37,10 @@ private:
     VideoCapture *cap;
     RCDraw *visorS, *visorD;
     QImage *imgS, *imgD;
-    Mat colorImage, grayImage, destColorImage, destGrayImage;
+    Mat colorImage, grayImage, destColorImage, destGrayImage, Black_Color_Image, Black_Gray_Image;
     Mat gray2ColorImage, destGray2ColorImage;
     bool capture, showColorImage, winSelected;
-    bool click, savebool, loadbool,resizebool;
+    bool click, savebool, loadbool,resizebool,enlargebool;
     Rect imageWindow;
 
 
@@ -52,6 +52,8 @@ public slots:
     void save_Image();
     void load_Image();
     void resize_Image();
+    void enlarge_Image();
+
 
     void selectWindow(QPointF p, int w, int h);
     void deselectWindow();

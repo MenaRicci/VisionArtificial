@@ -20,9 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
     imgD = new QImage(320,240, QImage::Format_RGB888);
     visorD = new RCDraw(320,240, imgD, ui->imageFrameD);
 
+
+
     colorImage.create(240,320,CV_8UC3);
     grayImage.create(240,320,CV_8UC1);
     destColorImage.create(240,320,CV_8UC3);
+    Black_Color_Image.create(240,320,CV_8UC3);
+    Black_Gray_Image.create(240,320,CV_8UC1);
+
     destGrayImage.create(240,320,CV_8UC1);
     gray2ColorImage.create(240,320,CV_8UC3);
     destGray2ColorImage.create(240,320,CV_8UC3);
@@ -34,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->SaveButton,SIGNAL(clicked()),this,SLOT(save_Image()));
     connect(ui->LoadButton,SIGNAL(clicked()),this,SLOT(load_Image()));
     connect(ui->ResizeButton,SIGNAL(clicked()),this,SLOT(resize_Image()));
+    connect(ui->EnlargeButton,SIGNAL(clicked()),this,SLOT(enlarge_Image()));
 
     connect(visorS,SIGNAL(windowSelected(QPointF, int, int)),this,SLOT(selectWindow(QPointF, int, int)));
     connect(visorS,SIGNAL(pressEvent()),this,SLOT(deselectWindow()));
@@ -118,7 +124,7 @@ void MainWindow::set_Image()
     int centro_wdt_image=imageWindow.width/2;
     int centro_hgt_image=imageWindow.height/2;
     //ui->textEdit->setText(centro_hgt_image);
-    printf("Altura : %d",centro_hgt_image);
+    printf("Altura : %d\nn",centro_hgt_image);
 
     int origen_x =160-centro_wdt_image;
     int origen_y =120-centro_hgt_image;
@@ -126,6 +132,10 @@ void MainWindow::set_Image()
 
     int fin_x =origen_x+imageWindow.width;
     int fin_y =origen_y+imageWindow.height;
+
+
+    destColorImage=Black_Color_Image.clone();
+    destGrayImage=Black_Gray_Image.clone();
 
 if(showColorImage){
     Mat cuadroImagen=colorImage.colRange(imageWindow.x,imageWindow.x+imageWindow.width).rowRange(imageWindow.y,imageWindow.y+imageWindow.height);
@@ -171,8 +181,6 @@ capture=test;
 
 }
 
-
-
 void MainWindow::load_Image()
 {
 
@@ -206,7 +214,65 @@ start_stop_capture(false);
 void MainWindow::resize_Image()
 {
  resizebool=true;
- ui->textEdit->setText("Resize Image");
+
+ if(winSelected){
+
+    Mat cuadroImagen=colorImage.colRange(imageWindow.x,imageWindow.x+imageWindow.width).rowRange(imageWindow.y,imageWindow.y+imageWindow.height);
+    cv::resize(cuadroImagen,cuadroImagen, Size(320,240),0,0,INTER_LINEAR);
+    destColorImage=cuadroImagen.clone();
+
+    Mat cuadroImagen_Gray=grayImage.colRange(imageWindow.x,imageWindow.x+imageWindow.width).rowRange(imageWindow.y,imageWindow.y+imageWindow.height);
+    cv::resize(cuadroImagen_Gray,cuadroImagen_Gray, Size(320,240),0,0,INTER_LINEAR);
+    destGrayImage=cuadroImagen_Gray.clone();
+    }
+}
+
+
+void MainWindow::enlarge_Image()
+{
+ resizebool=true;
+
+ if(winSelected){
+
+      float fx=0,fy=0;
+
+      float Height=imageWindow.height;
+      float Width=imageWindow.width;
+
+
+      fy=240./Height;
+      fx=320./Width;
+
+     destColorImage=Black_Color_Image.clone();
+     destGrayImage=Black_Gray_Image.clone();
+
+
+     if(fx>fy){
+        int centro_wdt_image=(320/fy)/2;
+
+        int origen_x =160-centro_wdt_image;
+
+        int fin_x =origen_x+(320/fy);
+
+
+        Mat cuadroImagen_Gray=grayImage.colRange(imageWindow.x,imageWindow.x+imageWindow.width).rowRange(imageWindow.y,imageWindow.y+imageWindow.height);
+        cv::resize(cuadroImagen_Gray,cuadroImagen_Gray,Size(imageWindow.x+imageWindow.width,240));
+        qDebug()<<cuadroImagen_Gray.cols<<cuadroImagen_Gray.rows;
+        qDebug()<<origen_x<<fin_x;
+        cuadroImagen_Gray.copyTo(destGrayImage.colRange(origen_x,fin_x).rowRange(0,240));
+
+      //  destGrayImage=cuadroImagen_Gray.clone();
+
+
+
+     }
+     else{ // Ancho > Alto
+
+
+     }
+
+
+ }
 }
 
 
