@@ -169,6 +169,7 @@ capture=false;
      new QString("Text files (*.txt)"));
 
  if(!filename.isEmpty()){
+
  if(showColorImage){
     cvtColor(colorImage, colorImage, CV_BGR2RGB); //
     imwrite(filename.toStdString(), colorImage);
@@ -180,7 +181,6 @@ capture=false;
 capture=test;
 
 }
-
 void MainWindow::load_Image()
 {
 
@@ -207,8 +207,6 @@ cvtColor(colorImage,colorImage, CV_BGR2RGB);
 
 start_stop_capture(false);
 }
-
-
 void MainWindow::resize_Image()
 {
  resizebool=true;
@@ -224,8 +222,6 @@ void MainWindow::resize_Image()
     destGrayImage=cuadroImagen_Gray.clone();
     }
 }
-
-
 void MainWindow::enlarge_Image()
 {
  resizebool=true;
@@ -241,8 +237,8 @@ void MainWindow::enlarge_Image()
       fy=240./Height;
       fx=320./Width;
 
-     destColorImage=Black_Color_Image.clone();
-     destGrayImage=Black_Gray_Image.clone();
+     destColorImage.setTo(Scalar(0,0,0));//=Black_Color_Image.clone();
+     destGrayImage.setTo(0);//=Black_Gray_Image.clone();
 
 
      if(fx<fy) f = fx;
@@ -252,20 +248,22 @@ void MainWindow::enlarge_Image()
      marcoFinal.height  =rint( Height * f);
      marcoFinal.width = rint( Width * f);
 
+     qDebug()<<destColorImage.size().width<<destColorImage.size().height;
 
-     if(Height > Width){
-         marcoFinal.x = (destColorImage.size().width / 2.0 - Width/ 2.0);
+     if(fx > fy){
+         marcoFinal.x = (destColorImage.size().width / 2.0 - marcoFinal.width/ 2.0);
          marcoFinal.y = 0;
      }
-     else if(Height < Width)
+     else if(fx < fy)
      {
          marcoFinal.x = 0;
-         marcoFinal.y = (destColorImage.size().height / 2.0 - Height/ 2.0);
+         marcoFinal.y = (destColorImage.size().height / 2.0 - marcoFinal.height/ 2.0);
      }
      else{
          ui->textEdit->setText("Enlarge !!");
      }
 
+     qDebug()<<marcoFinal.x<<marcoFinal.y<<marcoFinal.width<<marcoFinal.height;
      cv::resize(colorImage(imageWindow),destColorImage(marcoFinal),Size(0,0),f,f);
      cv::resize(grayImage(imageWindow),destGrayImage(marcoFinal),Size(0,0),f,f);
 }
