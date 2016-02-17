@@ -206,11 +206,9 @@ cvtColor(colorImage, grayImage, CV_BGR2GRAY);
 cvtColor(colorImage,colorImage, CV_BGR2RGB);
 
 start_stop_capture(false);
-
-
-
-
 }
+
+
 void MainWindow::resize_Image()
 {
  resizebool=true;
@@ -234,7 +232,7 @@ void MainWindow::enlarge_Image()
 
  if(winSelected){
 
-      float fx=0,fy=0;
+      float fx=0.0,fy=0.0, f=0.0;
 
       float Height=imageWindow.height;
       float Width=imageWindow.width;
@@ -247,32 +245,30 @@ void MainWindow::enlarge_Image()
      destGrayImage=Black_Gray_Image.clone();
 
 
-     if(fx>fy){
-        int centro_wdt_image=(320/fy)/2;
+     if(fx<fy) f = fx;
+     else f = fy;
 
-        int origen_x =160-centro_wdt_image;
-
-        int fin_x =origen_x+(320/fy);
-
-
-        Mat cuadroImagen_Gray=grayImage.colRange(imageWindow.x,imageWindow.x+imageWindow.width).rowRange(imageWindow.y,imageWindow.y+imageWindow.height);
-        cv::resize(cuadroImagen_Gray,cuadroImagen_Gray,Size(imageWindow.x+imageWindow.width,240));
-        qDebug()<<cuadroImagen_Gray.cols<<cuadroImagen_Gray.rows;
-        qDebug()<<origen_x<<fin_x;
-        cuadroImagen_Gray.copyTo(destGrayImage.colRange(origen_x,fin_x).rowRange(0,240));
-
-      //  destGrayImage=cuadroImagen_Gray.clone();
+     Rect marcoFinal;
+     marcoFinal.height  =rint( Height * f);
+     marcoFinal.width = rint( Width * f);
 
 
-
+     if(Height > Width){
+         marcoFinal.x = (destColorImage.size().width / 2.0 - Width/ 2.0);
+         marcoFinal.y = 0;
      }
-     else{ // Ancho > Alto
-
-
+     else if(Height < Width)
+     {
+         marcoFinal.x = 0;
+         marcoFinal.y = (destColorImage.size().height / 2.0 - Height/ 2.0);
+     }
+     else{
+         ui->textEdit->setText("Enlarge !!");
      }
 
-
- }
+     cv::resize(colorImage(imageWindow),destColorImage(marcoFinal),Size(0,0),f,f);
+     cv::resize(grayImage(imageWindow),destGrayImage(marcoFinal),Size(0,0),f,f);
+}
 }
 
 
