@@ -121,7 +121,7 @@ void MainWindow::start_stop_capture(bool start)
 void MainWindow::set_Image()
 {
  if(winSelected){
-     ui->textEdit->setText("Hola");
+    // ui->textEdit->setText("Hola");
 //colorImage.copyTo();
 
    //  destColorImage.resize(colorImage.rowRange(imageWindow.x,imageWindow.width).colRange(imageWindow.y,imageWindow.height));
@@ -155,36 +155,20 @@ else{
 }
    // cuadroImagen.copyTo(destGrayImage.colRange(origen_x,fin_x).rowRange(origen_y,fin_y));
  }
+
  else{
      destColorImage=colorImage.clone();
      destGrayImage=grayImage.clone();
  }
 }
-
-
-
-
 void MainWindow::rotate_Image(){
-    ui->textEdit->setText("Hola desde rotate");
 int numeroHorizontal=ui->HorizontalTranslation->value();
 float angle=ui->Dial->value()/10.;
 int numerovertical=ui->VerticalTranslation->value();
-
-//InputArray MT={{0,0,0},{0,0,0}};
-//int A[2][3]={{0,0,0},{0,0,0}};
 Mat MT(2,3,CV_32FC1);
 
-/*
-
-Mat rotation_matrix(2,3,CV_32FC1);
-
-
-
-
-Point CentroImagen=Point(160,120);
-
-rotation_matrix=getRotationMatrix2D(CentroImagen, angle, (double)numeroHorizontal);
-*/
+destColorImage.setTo(Scalar(0,0,0));//=Black_Color_Image.clone();
+destGrayImage.setTo(0);//=Black_Gray_Image.clone();
 
 MT.row(0).col(0)=cos(angle);
 MT.row(0).col(1)=sin(angle);
@@ -193,20 +177,27 @@ MT.row(0).col(2)=numeroHorizontal;
 MT.row(1).col(0)=-sin(angle);
 MT.row(1).col(1)=cos(angle);
 MT.row(1).col(2)=numerovertical;
+Mat Aux;
+Mat Aux_Grey;
 
 
+Rect marcoFinal;
+marcoFinal.height  =rint( 120);
+marcoFinal.width = rint( 160);
 
-warpAffine(colorImage, destColorImage, MT, Size(320,240));
+cv::resize(colorImage,Aux,Size(0,0),ui->Zoom->value(),ui->Zoom->value());
+cv::resize(grayImage,Aux_Grey,Size(0,0),ui->Zoom->value(),ui->Zoom->value());
+
+warpAffine(Aux, destColorImage, MT, Size(320,240));
+warpAffine(Aux_Grey, destGrayImage, MT, Size(320,240));
 
 }
-
-
 void MainWindow::save_Image()
 {
  savebool=true;
 bool test=capture;
 capture=false;
- ui->textEdit->setText("Save Image");
+ //ui->textEdit->setText("Save Image");
 
  QString filename=QFileDialog::getSaveFileName(0,"Save file",QDir::currentPath(),
 "JPG files (*.jpg);;BMP files (*.bmp);;PNG files (*.png);;All files (*.*)",
@@ -229,7 +220,7 @@ void MainWindow::load_Image()
 {
 
 loadbool=true;
-ui->textEdit->setText("Load Image");
+//ui->textEdit->setText("Load Image");
 
 QString filters("JPG files (*.jpg);;BMP files (*.bmp);;PNG files (*.png);;All files (*.*)");
 QString defaultFilter("All files (*.*)");
@@ -304,7 +295,7 @@ void MainWindow::enlarge_Image()
          marcoFinal.y = (destColorImage.size().height / 2.0 - marcoFinal.height/ 2.0);
      }
      else{
-         ui->textEdit->setText("Enlarge !!");
+         //ui->textEdit->setText("Enlarge !!");
      }
 
      qDebug()<<marcoFinal.x<<marcoFinal.y<<marcoFinal.width<<marcoFinal.height;
@@ -312,8 +303,6 @@ void MainWindow::enlarge_Image()
      cv::resize(grayImage(imageWindow),destGrayImage(marcoFinal),Size(0,0),f,f);
 }
 }
-
-
 void MainWindow::change_color_gray(bool color)
 {
     if(color)
@@ -327,7 +316,6 @@ void MainWindow::change_color_gray(bool color)
         showColorImage = false;
     }
 }
-
 void MainWindow::selectWindow(QPointF p, int w, int h)
 {
     QPointF pEnd;
@@ -353,7 +341,6 @@ void MainWindow::selectWindow(QPointF p, int w, int h)
 
     }
 }
-
 void MainWindow::warped(bool clicked)
 {
 warpeded=clicked;

@@ -144,16 +144,6 @@
     <string>Resize</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="textEdit">
-   <property name="geometry">
-    <rect>
-     <x>710</x>
-     <y>280</y>
-     <width>131</width>
-     <height>91</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="EnlargeButton">
    <property name="geometry">
     <rect>
@@ -280,6 +270,44 @@
    </property>
    <property name="text">
     <string>Angle</string>
+   </property>
+  </widget>
+  <widget class="QSlider" name="Zoom">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>320</y>
+     <width>191</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>10</number>
+   </property>
+   <property name="singleStep">
+    <number>1</number>
+   </property>
+   <property name="pageStep">
+    <number>1</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>280</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Zoom</string>
    </property>
   </widget>
  </widget>
