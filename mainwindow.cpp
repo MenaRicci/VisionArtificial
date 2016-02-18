@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->LoadButton,SIGNAL(clicked()),this,SLOT(load_Image()));
     connect(ui->ResizeButton,SIGNAL(clicked()),this,SLOT(resize_Image()));
     connect(ui->EnlargeButton,SIGNAL(clicked()),this,SLOT(enlarge_Image()));
+    connect(ui->WarpButton,SIGNAL(clicked(bool)),this,SLOT(warped(bool)));
 
     connect(visorS,SIGNAL(windowSelected(QPointF, int, int)),this,SLOT(selectWindow(QPointF, int, int)));
     connect(visorS,SIGNAL(pressEvent()),this,SLOT(deselectWindow()));
@@ -69,6 +70,11 @@ void MainWindow::compute()
         cvtColor(colorImage, grayImage, CV_BGR2GRAY);
         cvtColor(colorImage, colorImage, CV_BGR2RGB);
 
+    }
+
+    if(warpeded){
+        //warpeded=false;
+        rotate_Image();
     }
 
 
@@ -148,15 +154,53 @@ else{
         cuadroImagen.copyTo(destGrayImage.colRange(origen_x,fin_x).rowRange(origen_y,fin_y));
 }
    // cuadroImagen.copyTo(destGrayImage.colRange(origen_x,fin_x).rowRange(origen_y,fin_y));
-
-
  }
  else{
      destColorImage=colorImage.clone();
      destGrayImage=grayImage.clone();
  }
+}
+
+
+
+
+void MainWindow::rotate_Image(){
+    ui->textEdit->setText("Hola desde rotate");
+int numeroHorizontal=ui->HorizontalTranslation->value();
+float angle=ui->Dial->value()/10.;
+int numerovertical=ui->VerticalTranslation->value();
+
+//InputArray MT={{0,0,0},{0,0,0}};
+//int A[2][3]={{0,0,0},{0,0,0}};
+Mat MT(2,3,CV_32FC1);
+
+/*
+
+Mat rotation_matrix(2,3,CV_32FC1);
+
+
+
+
+Point CentroImagen=Point(160,120);
+
+rotation_matrix=getRotationMatrix2D(CentroImagen, angle, (double)numeroHorizontal);
+*/
+
+MT.row(0).col(0)=cos(angle);
+MT.row(0).col(1)=sin(angle);
+MT.row(0).col(2)=numeroHorizontal;
+
+MT.row(1).col(0)=-sin(angle);
+MT.row(1).col(1)=cos(angle);
+MT.row(1).col(2)=numerovertical;
+
+
+
+warpAffine(colorImage, destColorImage, MT, Size(320,240));
 
 }
+
+
 void MainWindow::save_Image()
 {
  savebool=true;
@@ -310,6 +354,10 @@ void MainWindow::selectWindow(QPointF p, int w, int h)
     }
 }
 
+void MainWindow::warped(bool clicked)
+{
+warpeded=clicked;
+}
 void MainWindow::deselectWindow()
 {
     winSelected = false;

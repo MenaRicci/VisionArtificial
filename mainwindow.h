@@ -39,7 +39,7 @@ private:
     QImage *imgS, *imgD;
     Mat colorImage, grayImage, destColorImage, destGrayImage, Black_Color_Image, Black_Gray_Image;
     Mat gray2ColorImage, destGray2ColorImage;
-    bool capture, showColorImage, winSelected;
+    bool capture, showColorImage, winSelected,warpeded, clicked;
     bool click, savebool, loadbool,resizebool,enlargebool;
     Rect imageWindow;
 
@@ -53,6 +53,9 @@ public slots:
     void load_Image();
     void resize_Image();
     void enlarge_Image();
+    void rotate_Image();
+
+    void warped(bool warp);
 
 
     void selectWindow(QPointF p, int w, int h);

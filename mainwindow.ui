@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>860</width>
-    <height>344</height>
+    <height>373</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -148,7 +148,7 @@
    <property name="geometry">
     <rect>
      <x>710</x>
-     <y>250</y>
+     <y>280</y>
      <width>131</width>
      <height>91</height>
     </rect>
@@ -165,6 +165,121 @@
    </property>
    <property name="text">
     <string>Enlarge</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="WarpButton">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>230</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Warp</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QDial" name="Dial">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>283</y>
+     <width>81</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>3600</number>
+   </property>
+   <property name="pageStep">
+    <number>10</number>
+   </property>
+  </widget>
+  <widget class="QSlider" name="HorizontalTranslation">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>318</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>160</number>
+   </property>
+   <property name="singleStep">
+    <number>10</number>
+   </property>
+   <property name="value">
+    <number>0</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QSlider" name="VerticalTranslation">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>320</y>
+     <width>191</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>120</number>
+   </property>
+   <property name="singleStep">
+    <number>10</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>290</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Horizontal Translation</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>290</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Vertial Translation</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>270</y>
+     <width>67</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Angle</string>
    </property>
   </widget>
  </widget>
