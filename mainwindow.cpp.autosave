@@ -188,11 +188,8 @@ MarcoCentral.height=240;
 cv::resize(colorImage,Aux,Size(0,0),ui->Zoom->value(),ui->Zoom->value());
 cv::resize(grayImage,Aux_Grey,Size(0,0),ui->Zoom->value(),ui->Zoom->value());
 
-
-
 MarcoCentral.x=Aux.cols/2-160;
 MarcoCentral.y=Aux.rows/2-120;
-
 
 warpAffine(Aux(MarcoCentral), destColorImage, MT, Size(320,240));
 warpAffine(Aux_Grey(MarcoCentral), destGrayImage, MT, Size(320,240));
